@@ -1,0 +1,16 @@
+tunnel: hut_pi
+
+# NOTE: this filename will change everytime we recreate the tunnel
+credentials-file: /home/john/.cloudflared/1e79066a-048d-4b1a-b847-e9b5b4892a99.json
+
+ingress:
+  - hostname: 5040.oram.ca
+    service: http://localhost:8000
+
+  - hostname: ssh-5040.oram.ca
+    service: ssh://localhost:22
+
+  - hostname: hello-world-5040.oram.ca
+    service: hello_world
+
+  - service: http_status:404

@@ -1,0 +1,12 @@
+# IDE scruff
+.idea
+
+# Python scruff
+*.pyc
+venv
+
+# Secrets
+.env
+
+# Data
+data/*
