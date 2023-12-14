@@ -35,7 +35,7 @@ setup: _setup_ramfs
 
 _setup_ramfs:
 	echo "tmpfs /var/log tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
-	echo "tmpfs /home/pi/5040_hut_station/data tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
+	echo "tmpfs /home/pi/accvi-5040-hut/data tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
 	sort -u /etc/fstab  # remove duplicate lines
 	mount -a
 
