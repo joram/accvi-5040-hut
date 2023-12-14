@@ -1,6 +1,13 @@
 include .env
 
 install: setup
+	# Require a .env file to exist
+	if [ ! -f /tmp/foo.txt ]; then
+		echo ".env file not found! this is needed for the setup to work."
+		echo "please read ./docs/SETUP_PI.md for more information."
+		exit 1
+	fi
+
 	# creates a tunnel for the pi, and all appropriate dns entries.
 	cloudflared tunnel create hut_pi_$HOSTNAME
 	cloudflared tunnel route dns hut_pi_$HOSTNAME 5040-$HOSTNAME.oram.ca
