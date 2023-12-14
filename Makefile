@@ -1,20 +1,22 @@
 include .env
+$(eval export $(shell sed -ne 's/ *#.*$$//; /./ s/=.*$$// p' .env))
+
 
 install: setup
-	# Require a .env file to exist
-	if [ ! -f /tmp/foo.txt ]; then
-		echo ".env file not found! this is needed for the setup to work."
-		echo "please read ./docs/SETUP_PI.md for more information."
-		exit 1
-	fi
+	cloudflared login
 
 	# creates a tunnel for the pi, and all appropriate dns entries.
-	cloudflared tunnel create hut_pi_$HOSTNAME
-	cloudflared tunnel route dns hut_pi_$HOSTNAME 5040-$HOSTNAME.oram.ca
-	cloudflared tunnel route dns hut_pi_$HOSTNAME ssh-5040-$HOSTNAME.oram.ca
-	cloudflared tunnel route dns hut_pi_$HOSTNAME hello-world-5040-$HOSTNAME.oram.ca
+	#cloudflared tunnel create hut_pi_${HOSTNAME}
+	cloudflared tunnel route dns hut_pi_${HOSTNAME} 5040-${HOSTNAME}.oram.ca
+	cloudflared tunnel route dns hut_pi_${HOSTNAME} ssh-5040-${HOSTNAME}.oram.ca
+	cloudflared tunnel route dns hut_pi_${HOSTNAME} hello-world-5040-${HOSTNAME}.oram.ca
+
+	# remove previous
+	sudo cloudflared service uninstall
+	sudo rm /etc/cloudflared/config.yml
 
 	# creates a systemd service for the tunnel
+	rm ${HOSTNAME}-cloudflared.yaml
 	cat ./setup_files/cloudflared.template.yaml | envsubst > ${HOSTNAME}-cloudflared.yaml
 	sudo cloudflared --config ${HOSTNAME}-cloudflared.yaml service install
 	sudo systemctl enable cloudflared
@@ -31,12 +33,12 @@ setup: _setup_ramfs
 	sudo apt install -y cloudflared
 	sudo sysctl -w net.core.rmem_max=2500000
 	sudo sysctl -w net.core.wmem_max=2500000
-	sudo pip install PyVantagePro
 
 _setup_ramfs:
-	echo "tmpfs /var/log tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
-	echo "tmpfs /home/pi/accvi-5040-hut/data tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
-	sort -u /etc/fstab  # remove duplicate lines
-	mount -a
-
+	sudo chmod 777 /etc/fstab
+	sudo echo "tmpfs /var/log tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
+	sudo echo "tmpfs /home/pi/accvi-5040-hut/data tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
+	sudo sort -u /etc/fstab  # remove duplicate lines
+	sudo systemctl daemon-reload
+	sudo mount -a
 

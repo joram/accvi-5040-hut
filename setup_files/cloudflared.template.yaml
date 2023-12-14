@@ -1,7 +1,7 @@
-tunnel: hut_pi
+tunnel: hut_pi_${HOSTNAME}
 
 # NOTE: this filename will change everytime we recreate the tunnel
-credentials-file: /home/john/.cloudflared/${CLOUDFLARED_TUNNEL_ID}.json
+credentials-file: /home/pi/.cloudflared/${CLOUDFLARED_TUNNEL_ID}.json
 
 ingress:
   - hostname: 5040-${HOSTNAME}.oram.ca

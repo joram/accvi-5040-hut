@@ -19,6 +19,7 @@ and add the new one to the table above
 Create a new user that all admins can su into (called `pi`)
 ```bash
 sudo adduser pi
+sudo usermod -aG sudo pi
 ```
 
 Create a user for each admin for the pi, and give them a temporary password for them to update on first login
@@ -32,7 +33,7 @@ sudo adduser john
 ### Clone source code
 ```bash
 sudo apt install git
-git clone git@github.com:joram/accvi-5040-hut.git
+git clone https://github.com/joram/accvi-5040-hut.git
 cd accvi-5040-hut
 ```
 
