@@ -3,17 +3,17 @@ This repository is for managing the software for the weather station and camera,
 
 ## Weather Station
 
-### S3 5040.oram.ca
-
 ### victoriaweather.ca
 
 ### wunderground.com
 [station here](https://www.wunderground.com/dashboard/pws/IUCLUE4)
 
-## Webcam
-
 ### S3 5040.oram.ca
+
+## Webcam
 
 ### Windy
 once the hut is setup, with a consistent image url for the latest, we can register it here:
 https://www.windy.com/-Add-new-webcam/webcams/add?48.477,-123.531,5
+
+### S3 5040.oram.ca
