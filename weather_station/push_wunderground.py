@@ -49,10 +49,16 @@ def _push_weather(
 def push_weather():
     data = get_weather_data()
     _push_weather(
-
+        humidity=data.get("HumOut"),
+        barometer_in=data.get("Barometer"),
+        wind_speed_mph=data.get("WindSpeed"),
+        wind_gust_mph=data.get("WindSpeed10Min"),
+        temp_f=data.get("TempOut"),
+        rain_in=data.get("RainDay"),
+        soil_temp_f=data.get("SoilTemps", [None])[0],
+        wind_dir=data.get("WindDir"),
     )
 
 
-
 if __name__ == '__main__':
-    _push_weather()
+    push_weather()

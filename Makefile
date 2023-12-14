@@ -1,5 +1,22 @@
+include .env
 
-setup:
+install: setup
+	# creates a tunnel for the pi, and all appropriate dns entries.
+	cloudflared tunnel create hut_pi_$HOSTNAME
+	cloudflared tunnel route dns hut_pi_$HOSTNAME 5040-$HOSTNAME.oram.ca
+	cloudflared tunnel route dns hut_pi_$HOSTNAME ssh-5040-$HOSTNAME.oram.ca
+	cloudflared tunnel route dns hut_pi_$HOSTNAME hello-world-5040-$HOSTNAME.oram.ca
+
+	# creates a systemd service for the tunnel
+	cat ./setup_files/cloudflared.template.yaml | envsubst > ${HOSTNAME}-cloudflared.yaml
+	sudo cloudflared --config ${HOSTNAME}-cloudflared.yaml service install
+	sudo systemctl enable cloudflared
+	sudo systemctl start cloudflared
+
+	# setup cron jobs
+	sudo crontab -u pi /etc/cron.d/cronjobs
+
+setup: _setup_ramfs
 	sudo apt install -y curl lsb-release
 	curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-archive-keyring.gpg >/dev/null
 	echo "deb [signed-by=/usr/share/keyrings/cloudflare-archive-keyring.gpg] https://pkg.cloudflare.com/cloudflared bookworm main" | sudo tee  /etc/apt/sources.list.d/cloudflared.list
@@ -9,35 +26,10 @@ setup:
 	sudo sysctl -w net.core.wmem_max=2500000
 	sudo pip install PyVantagePro
 
+_setup_ramfs:
+	echo "tmpfs /var/log tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
+	echo "tmpfs /home/pi/5040_hut_station/data tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
+	sort -u /etc/fstab  # remove duplicate lines
+	mount -a
 
-create_tunnel:
-	cloudflared tunnel login
-	echo "note the ID of the tunnel, then run create_tunnel_dns"
-	echo "Next, run `make create_tunnel_dns`"
-
-create_tunnel_dns:
-	cloudflared tunnel create hut_pi
-	cloudflared tunnel route dns hut_pi 5040.oram.ca
-	cloudflared tunnel route dns hut_pi ssh-5040.oram.ca
-	cloudflared tunnel route dns hut_pi hello-world-5040.oram.ca
-	echo "to make sure this starts as a service on boot, run create_cloudflared_service"
-
-run_tunnel:
-	cloudflared tunnel --config ./setup_files/cloudflared.yaml run
-
-create_cloudflared_service:
-	sudo cloudflared --config ./setup_files/cloudflared.yaml service install
-	sudo systemctl enable cloudflared
-	sudo systemctl start cloudflared
-
-add_ssh_key:
-	ssh-copy-id -i ~/.ssh/id_rsa.pub ssh-5040.oram.ca
-
-
-martin_install:
-	apt install -y raspian-lite mariadb-server proftpd nginx python3-flask libhttp-date-perl
-	apt install -y python3-matplotlib
-	apt install -y python3-pip
-	yes | pip install mysql-connector-python
-	yes | pip install -U pymodbus
 
