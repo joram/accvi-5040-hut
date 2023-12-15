@@ -42,3 +42,9 @@ _setup_ramfs:
 	sudo systemctl daemon-reload
 	sudo mount -a
 
+setup_wifi:
+	cat ./setup_files/hut_wifi.template.nmconnection | envsubst > hut_wifi.nmconnection
+	cp ./hut_wifi.nmconnection /etc/NetworkManager/system-connections/hut_wifi.nmconnection
+	sudo chmod 700 /etc/NetworkManager/system-connections/hut_wifi.nmconnection
+	sudo chown root:root /etc/NetworkManager/system-connections/hut_wifi.nmconnection
+	nmcli reload ${WIFI_SSID}
