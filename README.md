@@ -10,6 +10,66 @@ This directory is specially mounted as a ramfs filesystem, so that it is stored 
 - DOWNSIDE: data is lost on reboot, and is not backed up.
 The cron job scripts in their respective directories are responsible for backing up the data, and flushing it from their respective directories.
 
+## System Diagram
+```mermaid
+classDiagram
+class Antenna {
+    Physically up a tree behind the hut
+}
+
+class BulletModem {
+    IP: 192.168.99.1
+}
+
+class IPCamera {
+    Model: Speco technologies O2iD8
+    IP: 192.168.99.149 ??? 192.168.99.150
+    Location: on the top of the front poll
+}
+
+class WeatherStation {
+    Model: Davis Vantage Pro 2
+    IP: 192.168.99.23
+}
+
+class RPI_Wx3 {
+    Model: Raspberry Pi
+    IP: 192.168.99.23
+}
+
+class RPI_Wx4 {
+    Model: Raspberry Pi
+    IP: 192.168.99.24
+}
+
+class RPI_Wx5 {
+    Model: Raspberry Pi
+    IP: 192.168.99.25
+}
+
+class WifiRouter {
+    IP: 192.68.99.128
+}
+
+class PoEInjector1 {
+    
+}
+
+class Switch {
+    model: Netgear switch (blue)
+}
+
+Antenna -- BulletModem
+BulletModem --> Switch
+Switch -- PoEInjector1
+PoEInjector1 -- IPCamera : running under the eaves
+Switch -- WeatherStation : 250ft cable to antenna
+Switch -- RPI_Wx3
+Switch -- RPI_Wx4
+Switch -- RPI_Wx5
+Switch -- WifiRouter
+```
+
 ## Weather Station
 the weather station script (`./weather_station/cron.sh`) is responsible for:
 - getting the data

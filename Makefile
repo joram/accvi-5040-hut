@@ -22,8 +22,10 @@ install: setup
 	sudo systemctl enable cloudflared
 	sudo systemctl start cloudflared
 
-	# setup cron jobs
-	sudo crontab -u pi /etc/cron.d/cronjobs
+	sudo nmcli c mod "Wired connection 1" ipv4.method manual ipv4.addresses ${FIXED_IP_ADDRESS}/32
+
+setup_cron_jobs:
+	echo "todo"
 
 setup: _setup_ramfs
 	sudo apt install -y curl lsb-release
@@ -41,10 +43,3 @@ _setup_ramfs:
 	sudo sort -u /etc/fstab  # remove duplicate lines
 	sudo systemctl daemon-reload
 	sudo mount -a
-
-setup_wifi:
-	cat ./setup_files/hut_wifi.template.nmconnection | envsubst > hut_wifi.nmconnection
-	cp ./hut_wifi.nmconnection /etc/NetworkManager/system-connections/hut_wifi.nmconnection
-	sudo chmod 700 /etc/NetworkManager/system-connections/hut_wifi.nmconnection
-	sudo chown root:root /etc/NetworkManager/system-connections/hut_wifi.nmconnection
-	nmcli reload ${WIFI_SSID}
