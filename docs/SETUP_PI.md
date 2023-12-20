@@ -41,6 +41,8 @@ cd accvi-5040-hut
 ```
 # used to create dns routes
 HOSTNAME=wx5
+CLOUDFLARED_TUNNEL_ID=...
+FIXED_IP_ADDRESS=192.168.99.25
 
 # used to backup webcam images and weather data to S3
 AWS_ACCESS_KEY_ID=...
