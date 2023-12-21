@@ -3,6 +3,8 @@ $(eval export $(shell sed -ne 's/ *#.*$$//; /./ s/=.*$$// p' .env))
 
 
 install: setup
+
+setup_cloudflared:
 	cloudflared login
 
 	# creates a tunnel for the pi, and all appropriate dns entries.
@@ -22,7 +24,8 @@ install: setup
 	sudo systemctl enable cloudflared
 	sudo systemctl start cloudflared
 
-	sudo nmcli c mod "Wired connection 1" ipv4.method manual ipv4.addresses ${FIXED_IP_ADDRESS}/32
+setup_network:
+	sudo nmcli c mod "Wired connection 1" ipv4.method manual ipv4.addresses ${FIXED_IP_ADDRESS}/32 ipv4.gateway "192.168.99.1" ipv4.dns "192.168.99.1 8.8.8.8 8.8.4.4"
 
 setup_cron_jobs:
 	echo "todo"
@@ -47,8 +50,4 @@ setup_ramfs:
 	sudo echo "tmpfs /home/pi/accvi-5040-hut/data tmpfs defaults,noatime,nosuid,mode=0755,size=100m 0 0" >> /etc/fstab
 	sudo sort -u /etc/fstab  # remove duplicate lines
 	sudo systemctl daemon-reload
-
-	sudo nmcli c mod "Wired connection 1" ipv4.method manual ipv4.addresses ${FIXED_IP_ADDRESS}/32
-
-	sudo nmcli c mod "Wired connection 1" ipv4.method manual ipv4.addresses ${FIXED_IP_ADDRESS}/32
 	sudo mount -a
