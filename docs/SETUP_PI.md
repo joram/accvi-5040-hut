@@ -5,9 +5,14 @@ On a fresh raspberry PI (tested with raspbian bookworm)
 ----------------
 | Hostname | IP Address    | Notes |
 |----------|---------------|-------|
-| wx3      | 192.168.99.23 |       |
-| wx4      | 192.168.99.24 |       |
-| wx5      | 192.168.99.25 |       |
+| wx3      | 192.168.99.23 | Unreachable atm |
+| wx4      | 192.168.99.24 | Unreachable atm |
+| wx5      | 192.168.99.25 | Bastion Node Going up this winter |
+| wx6      | 192.168.99.26 | Currently just an SD Card |
+| wx7      | 192.168.99.27 | Currently just an SD Card |
+
+- Gateway: 192.168.99.1
+- DNS: 192.168.99.1
 
 ## PI hostname
 sequentially number the PIs (wx3, wx4, wx5, etc)
