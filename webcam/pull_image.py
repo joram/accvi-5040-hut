@@ -5,7 +5,7 @@ import datetime
 
 
 def _filepath():
-    curr_dir = os.path.realpath(__file__)
+    curr_dir = os.path.dirname(os.path.realpath(__file__))
     curr_dt = datetime.datetime.now().strftime("%yY-%M-%dT%H:%m:%s")
     filepath = os.path.join(curr_dir, f"../data/webcam/{curr_dt}.jpg")
 
