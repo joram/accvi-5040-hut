@@ -6,10 +6,16 @@ import datetime
 
 def _filepath():
     curr_dir = os.path.realpath(__file__)
-    curr_dt = datetime.datetime.now().strftime("%y-%M-%DT%h:%m:%s")
-    filepath = os.path.join(curr_dir, f"../data/{curr_dt}.jpg")
-    if not os.path.exists(os.path.dirname(filepath)):
-        os.mkdir(os.path.dirname(filepath))
+    curr_dt = datetime.datetime.now().strftime("%yY-%M-%dT%H:%m:%s")
+    filepath = os.path.join(curr_dir, f"../data/webcam/{curr_dt}.jpg")
+
+    for dirname in [
+        "../data",
+        "../data/webcam",
+    ]:
+        fullpath = os.path.join(curr_dir, dirname)
+        if not os.path.exists(fullpath):
+            os.mkdir(fullpath)
     return filepath
 
 
