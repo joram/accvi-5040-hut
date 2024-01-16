@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import cv2
-import urllib.request
-import numpy as np
 import os
 import datetime
 
@@ -10,7 +8,8 @@ def _filepath():
     curr_dir = os.path.realpath(__file__)
     curr_dt = datetime.datetime.now().strftime("%y-%M-%DT%h:%m:%s")
     filepath = os.path.join(curr_dir, f"../data/{curr_dt}.jpg")
-    os.mkdirs(os.path.dirname(filepath), exist_ok=True)
+    if not os.path.exists(os.path.dirname(filepath)):
+        os.mkdir(os.path.dirname(filepath))
     return filepath
 
 
