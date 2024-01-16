@@ -2,6 +2,9 @@
 import cv2
 import os
 import datetime
+import dotenv
+
+dotenv.load_dotenv()
 
 
 def _filepath():
