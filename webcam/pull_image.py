@@ -38,6 +38,8 @@ def get_newest_image():
 
 def update_symbolic_link(filepath):
     symlink_path = os.path.join(os.path.dirname(filepath), "newest.jpg")
+    if os.path.exists(symlink_path):
+        os.remove(symlink_path)
     os.symlink(filepath, symlink_path, target_is_directory=False)
 
 
