@@ -21,30 +21,35 @@ class BulletModem {
     IP: 192.168.99.1
 }
 
-class IPCamera {
-    Model: Speco technologies O2iD8
-    IP: 192.168.99.149 ??? 192.168.99.150
-    Location: on the top of the front poll
+namespace Sensors {
+
+    class IPCamera {
+        Model: Speco technologies O2iD8
+        IP: 192.168.99.149 ??? 192.168.99.150
+        Location: on the top of the front poll
+    }
+    
+    class WeatherStation {
+        Model: Davis Vantage Pro 2
+        IP: 192.168.99.23
+    }
 }
 
-class WeatherStation {
-    Model: Davis Vantage Pro 2
-    IP: 192.168.99.23
-}
-
-class RPI_Wx3 {
-    Model: Raspberry Pi
-    IP: 192.168.99.23
-}
-
-class RPI_Wx4 {
-    Model: Raspberry Pi
-    IP: 192.168.99.24
-}
-
-class RPI_Wx5 {
-    Model: Raspberry Pi
-    IP: 192.168.99.25
+namespace Computers {
+    class RPI_Wx3 {
+        Model: Raspberry Pi
+        IP: 192.168.99.23
+    }
+    
+    class RPI_Wx4 {
+        Model: Raspberry Pi
+        IP: 192.168.99.24
+    }
+    
+    class RPI_Wx5 {
+        Model: Raspberry Pi
+        IP: 192.168.99.25
+    }
 }
 
 class WifiRouter {
@@ -55,15 +60,20 @@ class PoEInjector1 {
     
 }
 
+class PoEInjector2 {
+    
+}
+
 class Switch {
     model: Netgear switch (blue)
 }
 
 Antenna -- BulletModem
-BulletModem --> Switch
+BulletModem -- Switch
 Switch -- PoEInjector1
 PoEInjector1 -- IPCamera : running under the eaves
-Switch -- WeatherStation : 250ft cable to antenna
+Switch -- PoEInjector2
+PoEInjector2 -- WeatherStation : 250ft cable to antenna
 Switch -- RPI_Wx3
 Switch -- RPI_Wx4
 Switch -- RPI_Wx5

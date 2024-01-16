@@ -81,7 +81,8 @@ class ArchiveWeatherData(dict):
     # ExtraTemps    # 3s
     # SoilMoist     # 4s
 
-    def from_device(self, device: VantagePro2, start_date: datetime=None, end_date: datetime=None):
+    @classmethod
+    def from_device(cls, device: VantagePro2, start_date: datetime=None, end_date: datetime=None):
         if end_date is None:
             end_date = datetime.now()
         if start_date is None:
@@ -93,5 +94,5 @@ class ArchiveWeatherData(dict):
         )
 
         return [ArchiveWeatherData(
-
+            **datum,
         ) for datum in data_list]
