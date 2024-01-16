@@ -9,7 +9,7 @@ dotenv.load_dotenv()
 
 def _filepath():
     curr_dir = os.path.dirname(os.path.realpath(__file__))
-    curr_dt = datetime.datetime.now().strftime("%yY-%M-%dT%H:%m:%s")
+    curr_dt = datetime.datetime.now().strftime("%Y-%M-%dT%H:%m:%s")
     filepath = os.path.join(curr_dir, f"../data/webcam/{curr_dt}.jpg")
 
     for dirname in [
