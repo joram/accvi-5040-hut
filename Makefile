@@ -51,3 +51,9 @@ setup_ramfs:
  
 setup_cron_jobs: 
 	echo "todo"
+
+setup_webcam_cron:
+	crontab -l > mycron	#write out current crontab
+	echo "*/30 * * * * /home/pi/accvi-5040-hut/webcam/cron.sh" >> mycron #echo new cron into cron file
+	crontab mycron	#install new cron file
+	rm mycron
