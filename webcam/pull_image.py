@@ -9,12 +9,14 @@ dotenv.load_dotenv()
 
 def _filepath():
     curr_dir = os.path.dirname(os.path.realpath(__file__))
+    curr_date = datetime.datetime.now().strftime("%Y-%m-%d")
     curr_dt = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%s")
-    filepath = os.path.join(curr_dir, f"../data/webcam/{curr_dt}.jpg")
+    filepath = os.path.join(curr_dir, f"../data/webcam/{curr_date}/{curr_dt}.jpg")
 
     for dirname in [
         "../data",
         "../data/webcam",
+        f"../data/webcam/{curr_date}",
     ]:
         fullpath = os.path.join(curr_dir, dirname)
         if not os.path.exists(fullpath):
