@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+cd /home/pi/5040_hut_bastion/data/webcam
 lastim=`ls -tr . | tail -1`
 echo $lastim
 
