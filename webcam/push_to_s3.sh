@@ -8,6 +8,6 @@ if [ ! "$(ls -A ./data/webcam/*.tar.gz)" ]; then
 fi
 export $(grep -v '^#' .env | xargs -0)  # Load environment variables
 
-
+cd ./data/webcam/
 # if there is any tar.gz files, send them to s3
-aws s3 sync --follow-symlinks ./data/webcam/*.tar.gz s3://5040-hut-data.oram.ca/webcam/ # Sync data to S3
+aws s3 sync --follow-symlinks *.tar.gz s3://5040-hut-data.oram.ca/webcam/ # Sync data to S3
