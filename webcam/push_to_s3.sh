@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 # This is meant to be run from the root of the project
+export $(grep -v '^#' .env | xargs -0)  # Load environment variables
 
 # if there is no tar.gz files, exit
 if [ ! "$(ls -A ./data/webcam/*.tar.gz)" ]; then
