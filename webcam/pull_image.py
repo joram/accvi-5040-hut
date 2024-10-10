@@ -4,11 +4,11 @@ import os
 import datetime
 import dotenv
 
-dotenv.load_dotenv()
+curr_dir = os.path.dirname(os.path.realpath(__file__))
+dotenv.load_dotenv(f"{curr_dir}/../.env")
 
 
 def _filepath():
-    curr_dir = os.path.dirname(os.path.realpath(__file__))
     curr_date = datetime.datetime.now().strftime("%Y-%m-%d")
     curr_dt = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%s")
     filepath = os.path.join(curr_dir, f"../data/webcam/{curr_date}/{curr_dt}.jpg")
@@ -30,7 +30,7 @@ def get_newest_image():
     ip = os.environ.get("WEBCAM_IP")
     filepath = _filepath()
 
-    rtsp_url = f"rtsp://{username}:{password}@{ip}:554/h265Preview_01_main"
+    rtsp_url = f"rtsp://{username}:{password}@{ip}:554/Streaming/Channels/101"
     cap = cv2.VideoCapture(rtsp_url)
     ret, frame = cap.read()
     cv2.imwrite(filepath, frame)
