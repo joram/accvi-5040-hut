@@ -60,3 +60,6 @@ setup_webcam_cron:
 	echo "*/30 * * * * /home/pi/accvi-5040-hut/webcam/cron.sh" >> mycron #echo new cron into cron file
 	crontab mycron	#install new cron file
 	rm mycron
+
+ssh:
+	ssh pi@ssh-5040-wx5.oram.ca

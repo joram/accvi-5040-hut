@@ -11,8 +11,8 @@ from data import CurrentWeatherData, ArchiveWeatherData
 
 STATION_URL = "tcp:192.168.99.23:1111"
 
-
-class WeatherStationSnapshot(dataclasses.dataclass):
+@dataclasses.dataclass
+class WeatherStationSnapshot:
     unix_timestamp: int
     firmware_version: str
     time: datetime.datetime
@@ -25,21 +25,22 @@ def get_weather_data() -> WeatherStationSnapshot:
     now = datetime.datetime.now()
     return WeatherStationSnapshot(
         time=now,
-        unix_timestamp=now.timestamp(),
+        unix_timestamp=int(now.timestamp()),
         firmware_version=device.firmware_version(),
-        current_data=CurrentWeatherData.from_device(device),
+        current_data=CurrentWeatherData().from_device(device),
         archives=ArchiveWeatherData.from_device(device),
     )
 
 
 def get_filepath():
     now = datetime.datetime.now()
-    now_str = now.strftime("%m/%d/%Y, %H:%M:%S")
+    now_str = now.strftime("%Y-%m-%d/%Y-%m-%dT%H:%M:%S")
     current_path = os.path.dirname(os.path.abspath(__file__))
     filepath = os.path.join(current_path, f"../data/weather_station/{now_str}.json")
     fullpath = os.path.abspath(filepath)
-    if not os.path.exists(fullpath):
-        os.makedirs(fullpath)
+    dirpath = os.path.dirname(fullpath)
+    if not os.path.exists(dirpath):
+        os.makedirs(dirpath)
     return filepath
 
 
