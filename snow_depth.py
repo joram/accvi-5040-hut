@@ -1,4 +1,6 @@
+#!/usr/bin/env python3
 import os
+import sys
 
 import cv2
 import numpy as np
@@ -6,7 +8,7 @@ import numpy as np
 POLE_BOTTOM = (2055, 1563)
 POLE_TOP =  (2105, 945)
 
-def debug_img(image_path, depth_percent):
+def debug_img(image_path, snow_depth_directory, depth_percent):
     # Load the image
     image = cv2.imread(image_path)
     if image is None:
@@ -87,7 +89,9 @@ def debug_img(image_path, depth_percent):
     text_room = 50
     debug_image = debug_image[ty-buffer:by+buffer+text_room, bx-buffer:bx+width+buffer]
 
-    snow_depth_filepath = image_path.replace(".jpg", "_snow_depth.jpg")
+    filename = os.path.basename(image_path.replace(".jpg", "_snow_depth.jpg"))
+    snow_depth_filepath = os.path.join(snow_depth_directory, filename)
+
     if os.path.exists(snow_depth_filepath):
         os.remove(snow_depth_filepath)
     cv2.imwrite(snow_depth_filepath, debug_image)
@@ -129,7 +133,6 @@ def calc_snow_depth(image_path):
     num_dark_pixels = 0
     for i, color in enumerate(pixels):
         weight = sum(color)
-        print(f"Segment {i + 1}: {weight} {color}")
         if weight > snow_brightness_threshold:
             last_bright_pixel = i
             continue
@@ -145,13 +148,18 @@ def list_files(directory, extension):
     return [f for f in os.listdir(directory) if f.endswith(extension)]
 
 
-# Example usage
-for file in list_files('./data/webcam', '.jpg'):
-    if "snow_depth" in file:
-        continue
-    image_filepath = os.path.abspath(os.path.join('data/webcam', file))
-    ratio = calc_snow_depth(image_filepath)
-    debug_img(image_filepath, ratio)
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: snow_depth.py <image_filepath> <depth_image_filepath>")
+        sys.exit(1)
+    image_filepath = sys.argv[1]
 
+    ratio = calc_snow_depth(image_filepath)
     depth = 600 * ratio
-    print(f"Snow depth: {round(depth, 2)} cm")
+
+    if len(sys.argv) == 3:
+        depth_image_filepath = sys.argv[2]
+        debug_img(image_filepath,  depth_image_filepath, ratio)
+
+    print(depth)
+    sys.exit(0)
