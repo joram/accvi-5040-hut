@@ -8,7 +8,7 @@ import numpy as np
 POLE_BOTTOM = (2055, 1563)
 POLE_TOP =  (2105, 945)
 
-def debug_img(image_path, snow_depth_directory, depth_percent):
+def debug_img(image_path, snow_depth_image_path, depth_percent):
     # Load the image
     image = cv2.imread(image_path)
     if image is None:
@@ -89,18 +89,14 @@ def debug_img(image_path, snow_depth_directory, depth_percent):
     text_room = 50
     debug_image = debug_image[ty-buffer:by+buffer+text_room, bx-buffer:bx+width+buffer]
 
-    filename = os.path.basename(image_path.replace(".jpg", "_snow_depth.jpg"))
-    snow_depth_filepath = os.path.join(snow_depth_directory, filename)
-
-    if os.path.exists(snow_depth_filepath):
-        os.remove(snow_depth_filepath)
-    cv2.imwrite(snow_depth_filepath, debug_image)
+    if os.path.exists(snow_depth_image_path):
+        os.remove(snow_depth_image_path)
+    cv2.imwrite(snow_depth_image_path, debug_image)
 
     snow_depth_cm = 0
     return snow_depth_cm
 
 def walk_along_pole(image_path, bottom, top, debug=False):
-
     # Load the image
     image = cv2.imread(image_path)
     if image is None:
@@ -157,9 +153,15 @@ if __name__ == "__main__":
     ratio = calc_snow_depth(image_filepath)
     depth = 600 * ratio
 
-    if len(sys.argv) == 3:
+    if len(sys.argv) >= 3:
         depth_image_filepath = sys.argv[2]
         debug_img(image_filepath,  depth_image_filepath, ratio)
+
+    if len(sys.argv) >= 4:
+        print(depth)
+        depth_text_filepath = sys.argv[3]
+        with open(depth_text_filepath, "w") as f:
+            f.write(str(depth))
 
     print(depth)
     sys.exit(0)
