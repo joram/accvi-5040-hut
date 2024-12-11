@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-cd /home/pi/5040_hut_bastion/
+cd /home/pi/accvi-5040-hut/
 export $(grep -v '^#' .env | xargs -0)  # Load environment variables
 
-./pull_data.sh
-./push_s3.sh
+./weather_station/pull_weather.sh
+./weather_station/push_s3.sh
