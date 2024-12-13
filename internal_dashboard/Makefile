@@ -7,4 +7,4 @@ install_service:
 
 install_dependencies:
 	echo "Installing dependencies"
-	pip install -r requirements.txt
+	sudo apt install python3-uvicorn python3-fastapi python3-requests
