@@ -1,0 +1,13 @@
+[Unit]
+Description=ACCVI Internal Dashboard
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/accvi-5040-hut/internal_dashboard
+ExecStart=uvicorn main:app --host 0.0.0.0 --port 5040
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
