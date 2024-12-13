@@ -6,7 +6,7 @@ After=network.target
 User=pi
 Group=pi
 WorkingDirectory=/home/pi/accvi-5040-hut/internal_dashboard
-ExecStart=./main.py
+ExecStart=/home/pi/accvi-5040-hut/internal_dashboard/main.py
 Restart=always
 
 [Install]
