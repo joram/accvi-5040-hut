@@ -156,6 +156,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) >= 3:
         depth_image_filepath = sys.argv[2]
+        os.makedirs(os.path.dirname(depth_image_filepath), exist_ok=True)
         debug_img(image_filepath,  depth_image_filepath, ratio)
 
     if len(sys.argv) >= 4:
