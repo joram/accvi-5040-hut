@@ -8,7 +8,9 @@ echo "Latest webcam image: $LATEST_WEBCAM_IMAGE"
 # Check if a .jpg file was found
 if [[ -n "$LATEST_WEBCAM_IMAGE" ]]; then
   LATEST_SNOW_DEPTH_DEBUG_IMAGE="${LATEST_WEBCAM_IMAGE%.jpg}_snow_depth.jpg"
+  LATEST_SNOW_DEPTH_DEBUG_IMAGE=$(echo "$LATEST_SNOW_DEPTH_DEBUG_IMAGE" | sed 's/webcam/snow_depth/g')
   LATEST_SNOW_DEPTH_DEBUG_TXT="${LATEST_WEBCAM_IMAGE%.jpg}_snow_depth.txt"
+  LATEST_SNOW_DEPTH_DEBUG_TXT=$(echo "$LATEST_SNOW_DEPTH_DEBUG_TXT" | sed 's/webcam/snow_depth/g')
   ./webcam/snow_depth.py $LATEST_WEBCAM_IMAGE $LATEST_SNOW_DEPTH_DEBUG_IMAGE $LATEST_SNOW_DEPTH_DEBUG_TXT
 
   # Check if the snow depth image was created

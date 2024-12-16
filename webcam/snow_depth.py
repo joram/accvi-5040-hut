@@ -96,6 +96,7 @@ def debug_img(image_path, snow_depth_image_path, depth_percent):
     snow_depth_cm = 0
     return snow_depth_cm
 
+
 def walk_along_pole(image_path, bottom, top, debug=False):
     # Load the image
     image = cv2.imread(image_path)
