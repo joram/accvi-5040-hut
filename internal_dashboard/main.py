@@ -39,8 +39,19 @@ def get_avi_report():
             data = json.load(f)
         return data
 
+    product_id = None
+    url = "https://api.avalanche.ca/forecasts/en/products"
+    response = requests.get(url)
+    data = response.json()
+    for product in data:
+        title = product["report"]["title"]
+        if "island" in title.lower():
+            product_id = product["id"]
+            break
+
+
     # If the data is not cached, fetch it from the API
-    url = "https://api.avalanche.ca/forecasts/en/products/5c5b9208-5a7a-40cb-a2e9-aae60cc015e7_76677f8b456f0efafa1e5d686775434cdc162b64d79f557880b8eefa6ed09891"
+    url = f"https://api.avalanche.ca/forecasts/en/products/{product_id}"
     response = requests.get(url)
     data = response.json()
     with open(cache_file, 'w') as f:
