@@ -82,7 +82,7 @@ function AvalancheForecast() {
     forecast.report.summaries.forEach((summary:any) => {
         summaries.push(
             <div>
-                <div>{summary.type.display}                    </div>
+                <h3>{summary.type.display}</h3>
                 <div dangerouslySetInnerHTML={{ __html: summary.content}} />
                 </div>
         )
@@ -90,24 +90,26 @@ function AvalancheForecast() {
 
     let advice: any[] = []
     forecast.report.terrainAndTravelAdvice.forEach((a:any) => {
-        advice.push(<div>{a}</div>)
+        advice.push(<li>{a}</li>)
     })
 
     return (
         <div>
             <Header/>
+            <h1>Avalanche Forecast</h1>
             <table>
                 <tr><td>Issued:</td><td>{forecast.report.dateIssued}</td></tr>
                 <tr><td>Highlights:</td><td><div dangerouslySetInnerHTML={{ __html:forecast.report.highlights}}/>
                 </td></tr>
             </table>
+            <h2>Danger Ratings</h2>
             <DangerRatings data={forecast.report.dangerRatings}/>
-            <div>Problems</div>
+            <h2>Problems</h2>
             {problems}
-            <div>Summaries</div>
+            <h2>Summaries</h2>
             {summaries}
-            <div>Terrain And Travel Advice</div>
-            {advice}
+            <h2>Terrain And Travel Advice</h2>
+            <ul>{advice}</ul>
         </div>
     );
 }
