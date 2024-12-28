@@ -8,3 +8,7 @@ install_service:
 install_dependencies:
 	echo "Installing dependencies"
 	sudo apt install python3-uvicorn python3-fastapi python3-requests
+
+build:
+	cd app && npm install
+	cd app && npm run build

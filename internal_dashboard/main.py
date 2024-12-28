@@ -8,24 +8,22 @@ from fastapi.staticfiles import StaticFiles
 
 from fastapi.responses import FileResponse
 import uvicorn
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #  static files
 curr_dir = os.path.dirname(os.path.realpath(__file__))
-static_dir = os.path.join(curr_dir, "static")
+static_dir = os.path.join(curr_dir, "dist/assets")
 data_dir = os.path.join(curr_dir, "../data")
-app.mount("/static", StaticFiles(directory=static_dir, html=True), name="static")
-
-# def _cache_images(data):
-#     images = data.get("media", {}).get("images", [])
-#     for image in images:
-#         url = image.get("url")
-#         response = requests.get(url)
-#         filename = url.split("/")[-1]
-#         with open(f"./data/website/{filename}", 'wb') as f:
-#             f.write(response.content)
+app.mount("/assets", StaticFiles(directory=static_dir, html=True), name="static")
 
 
 def get_avi_report():
@@ -60,6 +58,7 @@ def get_avi_report():
 
     return data
 
+
 def get_weather_forecast():
 
     now = datetime.now()
@@ -86,17 +85,20 @@ def get_weather_forecast():
 
 @app.get("/")
 def read_root():
-    return FileResponse("./static/index.html")
+    return FileResponse("./dist/index.html")
 
-@app.get("/avi_report")
+
+@app.get("/api/avalanche_forecast")
 def read_avi_report():
     data = get_avi_report()
     return data
 
-@app.get("/weather_forecast")
+
+@app.get("/api/weather_forecast")
 def read_weather_forecast():
     data = get_weather_forecast()
     return data
+
 
 if __name__ == "__main__":
     get_weather_forecast()
