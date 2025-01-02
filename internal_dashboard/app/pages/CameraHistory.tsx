@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import "../App.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {fetchFiles} from "../utils/list_s3_files.ts";
 import TimePicker from "../components/TimePicker.tsx";
 import "./CameraHistory.css"
 import Header from "../components/Header.tsx";
@@ -70,7 +69,7 @@ function CameraHistory() {
     const isMobile = window.innerWidth < 800;
 
     console.log(imageFiles)
-    let filename = "";
+    let filename: string | undefined = "";
     if (selectedFile === undefined || selectedFile === "") {
         filename = imageFiles[0].split("/").pop();
     } else {
