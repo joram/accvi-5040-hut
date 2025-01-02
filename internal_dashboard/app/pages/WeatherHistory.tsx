@@ -262,10 +262,17 @@ function WeatherHistory() {
     }
 
     useEffect(() => {
-        let url = "https://s3.ca-central-1.amazonaws.com/5040-hut-data.oram.ca/weather_station/summary.json"
-        fetch(url).then((response) => response.json()).then((dataJson) => {
-            url = `https://s3.ca-central-1.amazonaws.com/5040-hut-data.oram.ca/snow_depth/summary.json`;
-            fetch(url).then((response) => response.json()).then((snowData) => {
+        let url1 = "/api/weather_history";
+        if ("localhost" === window.location.hostname) {
+            url1 = "http://localhost:5040/api/weather_history";
+        }
+        let url2 = "/api/snow_depth";
+        if ("localhost" === window.location.hostname) {
+            url2 = "http://localhost:5040/api/snow_depth";
+        }
+
+        fetch(url1).then((response) => response.json()).then((dataJson) => {
+            fetch(url2).then((response) => response.json()).then((snowData) => {
                 setData(dataJson);
                 setBarometer(extractValues(dataJson, "Barometer"))
                 setTemperature(convertFareignheitToCelsius(extractValues(dataJson, "TempOut")))

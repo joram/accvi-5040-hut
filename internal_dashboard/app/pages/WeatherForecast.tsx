@@ -44,7 +44,11 @@ function WeatherForecast() {
     let [forecast, setForecast]:[any, any] = React.useState(null);
 
     React.useEffect(() => {
-        fetch("http://localhost:5040/api/weather_forecast").then((response) => {
+        let url = "/api/weather_forecast";
+        if ("localhost" === window.location.hostname) {
+            url = "http://localhost:5040/api/weather_forecast";
+        }
+        fetch(url).then((response) => {
             response.json().then((data) => {
                 setForecast(data);
             });

@@ -4,6 +4,7 @@ import "./ImageWithSpinner.css";
 
 const ImageWithSpinner = ({ src, alt}: {src:string, alt:string}) => {
     const [loading, setLoading] = useState(true);
+    console.log(src)
 
     const handleImageLoad = () => {
         setLoading(false);

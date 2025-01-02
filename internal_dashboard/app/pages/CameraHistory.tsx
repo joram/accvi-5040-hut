@@ -12,26 +12,16 @@ function CameraHistory() {
     const [imageFiles, setImageFiles] = useState<string[]>([]);
     const [selectedFile, setSelectedFile] = useState<string>("");
     const [date, setDate] = useState(new Date());
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchFiles(date).then((files) => {
-            let newImageFiles = []
-            let newDepthImageFiles = []
-            let newDepthsTxtFiles = []
-            for (let file of files) {
-                if (file.endsWith("snow_depth.jpg")) {
-                    newDepthImageFiles.push(file)
-                } else if (file.endsWith(".jpg")) {
-                    newImageFiles.push(file)
-                } else if (file.endsWith("_depth.txt")) {
-                    newDepthsTxtFiles.push(file)
-                }
-            }
-            setImageFiles(newImageFiles)
-            if(newImageFiles.length > 0){
-                setSelectedFile(newImageFiles[0])
-            }
+        let url = "/api/webcam/todays_images";
+        if ("localhost" === window.location.hostname) {
+            url = "http://localhost:5040/api/webcam/todays_images";
+        }
+        fetch(url).then(response => response.json()).then((data) => {
+            console.log("todays images", data.todays_images);
+            setImageFiles(data.todays_images);
             setLoading(false);
         })
     }, [date]);
@@ -46,9 +36,13 @@ function CameraHistory() {
 
         }
 
+        let url = "/api/webcam/key/" + filename;
+        if ("localhost" === window.location.hostname) {
+            url = "http://localhost:5040/api/webcam/key/" + filename;
+        }
 
         imageFileLinks.push(<li key={file}>
-            <a href={"https://s3.ca-central-1.amazonaws.com/5040-hut-data.oram.ca/" + file}>
+            <a href={url}>
                 {datetimeStr}
             </a>
         </li>)
@@ -74,7 +68,20 @@ function CameraHistory() {
     }
 
     const isMobile = window.innerWidth < 800;
-    const src = "https://s3.ca-central-1.amazonaws.com/5040-hut-data.oram.ca/" + selectedFile
+
+    console.log(imageFiles)
+    let filename = "";
+    if (selectedFile === undefined || selectedFile === "") {
+        filename = imageFiles[0].split("/").pop();
+    } else {
+        filename = selectedFile.split("/").pop();
+    }
+    let src = "/api/webcam/key/" + filename;
+    console.log(src)
+    if ("localhost" === window.location.hostname) {
+        src = "http://localhost:5040/api/webcam/key/" + filename;
+    }
+
     return (
         <>
             <Header/>
