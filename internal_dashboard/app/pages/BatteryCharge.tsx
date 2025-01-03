@@ -20,8 +20,10 @@ function BatteryCharge() {
     let [batteryCharge, setBatteryCharge] = React.useState({});
 
     React.useEffect(() => {
-        const url = `https://s3.ca-central-1.amazonaws.com/5040-hut-data.oram.ca/inverter_data/summary.json`;
-
+        let url = "/api/battery_history";
+        if ("localhost" === window.location.hostname) {
+            url = "http://localhost:5040/api/battery_history";
+        }
         fetch(url)
             .then((response) => response.json()) // Directly parse as JSON
             .then((dataJson) => {

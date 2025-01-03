@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-import requests
 import json
 import os
 from datetime import datetime
-from fastapi import FastAPI, APIRouter
-from fastapi.staticfiles import StaticFiles
 
-from fastapi.responses import FileResponse
+import requests
 import uvicorn
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from bs4 import BeautifulSoup
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 app.add_middleware(
@@ -179,6 +178,27 @@ def read_webcam_image(filename):
     with open(f"{data_dir}/webcam/{filename}", 'wb') as f:
         f.write(response.content)
     return FileResponse(f"{data_dir}/webcam/{filename}")
+
+@app.get("/api/battery_history")
+def read_battery_history():
+    url = "https://s3.ca-central-1.amazonaws.com/5040-hut-data.oram.ca/inverter_data/summary.json"
+    cache_file = _current_cache_filepath("battery_history")
+
+    # Check if the data is cached
+    if os.path.exists(cache_file):
+        with open(cache_file, 'r') as f:
+            data = json.load(f)
+        return data
+
+    # If the data is not cached, fetch it from the API
+    response = requests.get(url)
+    data = response.json()
+
+    # Save the data to the cache
+    with open(cache_file, 'w') as f:
+        f.write(json.dumps(data, indent=4, sort_keys=True))
+
+    return data
 
 if __name__ == "__main__":
     get_weather_forecast()
